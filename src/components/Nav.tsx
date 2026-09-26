@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { Menu, X } from 'lucide-react';
 
 const links = [
   { label: 'Work', href: '#work' },
@@ -11,6 +12,7 @@ const links = [
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -25,15 +27,16 @@ export default function Nav() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed left-1/2 top-4 z-[100] w-[calc(100%-2rem)] max-w-7xl -translate-x-1/2"
+        className="fixed left-1/2 top-4 z-[100] w-[calc(100%-1rem)] max-w-7xl -translate-x-1/2 sm:w-[calc(100%-2rem)]"
       >
         <div
-          className={`flex items-center justify-between rounded-full px-4 py-2.5 transition-all duration-500 sm:px-6 ${
+          className={`flex items-center justify-between rounded-full px-3 py-2.5 transition-all duration-500 sm:px-6 ${
             scrolled ? 'glass shadow-2xl shadow-black/40' : 'bg-transparent'
           }`}
         >
-          <a href="#top" className="flex items-center gap-1 font-display text-base font-semibold tracking-tight sm:text-lg">
-            Offscript<span className="text-accent-400"> Studio</span>
+          <a href="#top" className="flex items-center gap-1 font-display text-sm font-semibold tracking-tight sm:text-lg">
+            <span className="hidden sm:inline">Offscript<span className="text-accent-400"> Studio</span></span>
+            <span className="sm:hidden">Offscript</span>
           </a>
 
           <div className="hidden items-center gap-1 md:flex">
@@ -52,13 +55,44 @@ export default function Nav() {
           <div className="flex items-center gap-2 sm:gap-3">
             <a
               href="#configurator"
-              className="group relative overflow-hidden rounded-full bg-ink-50 px-3 py-2 text-xs font-medium text-ink-950 transition-transform hover:scale-[1.03] active:scale-95 sm:px-5 sm:text-sm"
+              className="group relative overflow-hidden rounded-full bg-ink-50 px-2.5 py-2 text-[10px] font-medium text-ink-950 transition-transform hover:scale-[1.03] active:scale-95 sm:px-5 sm:text-sm"
             >
-              <span className="relative z-10">Start a Project</span>
+              <span className="relative z-10">Start</span>
               <span className="absolute inset-0 translate-y-full bg-accent-400 transition-transform duration-300 group-hover:translate-y-0" />
             </a>
+            <button
+              type="button"
+              aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen((open) => !open)}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-ink-700 text-ink-100 transition-colors hover:border-accent-400 hover:text-accent-400 md:hidden"
+            >
+              {menuOpen ? <X size={17} /> : <Menu size={17} />}
+            </button>
           </div>
         </div>
+
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="glass mt-2 rounded-3xl p-3 md:hidden"
+          >
+            <div className="flex flex-col">
+              {links.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="rounded-2xl px-4 py-3 text-sm text-ink-200 transition-colors hover:bg-ink-50/5 hover:text-accent-400"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </motion.div>
+        )}
       </motion.nav>
     </>
   );
