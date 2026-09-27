@@ -35,7 +35,7 @@ export default function Hero() {
       onMouseMove={handleMouse}
       onMouseEnter={() => setMouseIn(true)}
       onMouseLeave={() => setMouseIn(false)}
-      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-24"
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-24 lg:pb-16"
     >
       {/* Background gradient */}
       <div className="absolute inset-0 -z-10">
@@ -152,6 +152,7 @@ export default function Hero() {
             See Our Approach
           </a>
         </motion.div>
+
       </div>
 
       {/* Scroll indicator */}
@@ -172,15 +173,6 @@ export default function Hero() {
         </div>
       </motion.div>
 
-      {/* Bottom statement */}
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-24 left-1/2 hidden -translate-x-1/2 text-center text-sm text-ink-500 lg:block"
-      >
-        Tell us what you need. We'll figure out what it should cost.
-      </motion.p>
     </section>
   );
 }

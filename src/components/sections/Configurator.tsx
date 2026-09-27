@@ -48,6 +48,7 @@ export default function Configurator() {
   const [config, setConfig] = useState<ProjectConfig>(initialConfig);
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
   const [submissionMessage, setSubmissionMessage] = useState('');
 
   const toggle = (key: keyof ProjectConfig, value: string) => {
@@ -75,13 +76,10 @@ export default function Configurator() {
     return true;
   };
 
-  const next = () => {
-    if (step < 5) setStep(step + 1);
-    else setSubmitted(true);
-  };
   const back = () => step > 0 && setStep(step - 1);
 
   const submitBrief = async () => {
+    if (isSubmitting || hasSubmitted) return;
     setIsSubmitting(true);
     setSubmissionMessage('');
 
@@ -118,7 +116,8 @@ export default function Configurator() {
 
       const result = await response.json();
 
-      if (result.success) {
+      if (response.ok && result.success) {
+        setHasSubmitted(true);
         setSubmissionMessage('Your brief has been submitted successfully. We will contact you shortly.');
       } else {
         setSubmissionMessage('There was a problem submitting your brief. Please email info.offscriptstudio@gmail.com directly.');
@@ -127,6 +126,14 @@ export default function Configurator() {
       setSubmissionMessage('There was a problem submitting your brief. Please email info.offscriptstudio@gmail.com directly.');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const next = () => {
+    if (step < 5) setStep(step + 1);
+    else {
+      setSubmitted(true);
+      void submitBrief();
     }
   };
 
@@ -148,9 +155,10 @@ export default function Configurator() {
             <FinalSummary
               config={config}
               isSubmitting={isSubmitting}
+              hasSubmitted={hasSubmitted}
               submissionMessage={submissionMessage}
               onSubmit={submitBrief}
-              onReset={() => { setSubmitted(false); setStep(0); setConfig(initialConfig); setSubmissionMessage(''); }}
+              onReset={() => { setSubmitted(false); setStep(0); setConfig(initialConfig); setHasSubmitted(false); setSubmissionMessage(''); }}
             />
           ) : (
             <motion.div
@@ -323,7 +331,7 @@ function Input({ label, value, onChange, placeholder, required }: { label: strin
   );
 }
 
-function FinalSummary({ config, isSubmitting, submissionMessage, onSubmit, onReset }: { config: ProjectConfig; isSubmitting: boolean; submissionMessage: string; onSubmit: () => Promise<void>; onReset: () => void }) {
+function FinalSummary({ config, isSubmitting, hasSubmitted, submissionMessage, onSubmit, onReset }: { config: ProjectConfig; isSubmitting: boolean; hasSubmitted: boolean; submissionMessage: string; onSubmit: () => Promise<void>; onReset: () => void }) {
   const rows: { label: string; value: string }[] = [
     { label: 'Project Type', value: config.projectTypes.join(', ') || 'Not specified' },
     { label: 'Business', value: config.business.name || 'Not specified' },
@@ -352,8 +360,12 @@ function FinalSummary({ config, isSubmitting, submissionMessage, onSubmit, onRes
           <Check size={32} />
         </motion.div>
 
-        <h3 className="mt-6 font-display text-4xl font-semibold text-ink-50">Got it.</h3>
-        <p className="mt-3 text-ink-300">Your project is being shaped around your requirements.</p>
+        <h3 className="mt-6 font-display text-4xl font-semibold text-ink-50">
+          {isSubmitting ? 'Sending your brief.' : hasSubmitted ? 'Got it.' : 'Review your brief.'}
+        </h3>
+        <p className="mt-3 text-ink-300">
+          {isSubmitting ? 'Sending your project details now.' : hasSubmitted ? 'Your project is being shaped around your requirements.' : 'Your details are ready to send.'}
+        </p>
 
         <div className="mt-10 space-y-3 text-left">
           {rows.map((row, i) => (
@@ -384,11 +396,11 @@ function FinalSummary({ config, isSubmitting, submissionMessage, onSubmit, onRes
         <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
           <button
             onClick={onSubmit}
-            disabled={isSubmitting}
+            disabled={isSubmitting || hasSubmitted}
             className="group flex items-center gap-2 rounded-full bg-accent-400 px-7 py-3.5 font-medium text-ink-950 transition-transform hover:scale-[1.03] active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
           >
             <Sparkles size={18} />
-            {isSubmitting ? 'Sending...' : 'Send My Brief'}
+            {isSubmitting ? 'Sending...' : hasSubmitted ? 'Brief Sent' : 'Send My Brief'}
           </button>
           <button
             onClick={onReset}
