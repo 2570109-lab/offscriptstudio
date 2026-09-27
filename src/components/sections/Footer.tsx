@@ -34,7 +34,7 @@ export default function Footer() {
             <ul className="mt-4 space-y-2">
               <li><a href="https://instagram.com" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-sm text-ink-300 transition-colors hover:text-accent-400"><Instagram size={14} /> Instagram</a></li>
               <li><a href="https://linkedin.com" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-sm text-ink-300 transition-colors hover:text-accent-400"><Linkedin size={14} /> LinkedIn</a></li>
-              <li><a href="mailto:hello@offscriptstudio.com" className="flex items-center gap-2 text-sm text-ink-300 transition-colors hover:text-accent-400"><Mail size={14} /> hello@offscriptstudio.com</a></li>
+              <li><a href="mailto:info.offscriptstudio@gmail.com" className="flex items-center gap-2 text-sm text-ink-300 transition-colors hover:text-accent-400"><Mail size={14} /> info.offscriptstudio@gmail.com</a></li>
               <li><a href="tel:+918171924503" className="flex items-center gap-2 text-sm text-ink-300 transition-colors hover:text-accent-400"><Phone size={14} /> +91 81719 24503</a></li>
             </ul>
           </div>

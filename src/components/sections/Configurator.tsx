@@ -121,10 +121,10 @@ export default function Configurator() {
       if (result.success) {
         setSubmissionMessage('Your brief has been submitted successfully. We will contact you shortly.');
       } else {
-        setSubmissionMessage('There was a problem submitting your brief. Please email hello@offscriptstudio.com directly.');
+        setSubmissionMessage('There was a problem submitting your brief. Please email info.offscriptstudio@gmail.com directly.');
       }
     } catch (error) {
-      setSubmissionMessage('There was a problem submitting your brief. Please email hello@offscriptstudio.com directly.');
+      setSubmissionMessage('There was a problem submitting your brief. Please email info.offscriptstudio@gmail.com directly.');
     } finally {
       setIsSubmitting(false);
     }
