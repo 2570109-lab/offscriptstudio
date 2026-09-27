@@ -1,67 +1,16 @@
-import { useRef, useState } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowUpRight, ArrowDown } from 'lucide-react';
 
-const floatCards = [
-  { label: 'Website', icon: '◐', x: -180, y: -120, delay: 0.1 },
-  { label: 'Content', icon: '◑', x: 160, y: -80, delay: 0.2 },
-  { label: 'Ads', icon: '◒', x: 200, y: 60, delay: 0.3 },
-  { label: 'SEO', icon: '◓', x: -120, y: 140, delay: 0.4 },
-  { label: 'Analytics', icon: '◔', x: 100, y: 180, delay: 0.5 },
-  { label: 'Growth', icon: '◕', x: -220, y: 20, delay: 0.6 },
-];
-
 export default function Hero() {
-  const ref = useRef<HTMLDivElement>(null);
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const sx = useSpring(mx, { stiffness: 50, damping: 20 });
-  const sy = useSpring(my, { stiffness: 50, damping: 20 });
-  const [mouseIn, setMouseIn] = useState(false);
-
-  const handleMouse = (e: React.MouseEvent) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
-    const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
-    mx.set(x);
-    my.set(y);
-  };
-
   return (
     <section
       id="top"
-      ref={ref}
-      onMouseMove={handleMouse}
-      onMouseEnter={() => setMouseIn(true)}
-      onMouseLeave={() => setMouseIn(false)}
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-24 lg:pb-16"
     >
       {/* Background gradient */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-500/10 blur-[120px]" />
         <div className="absolute bottom-0 left-0 h-[400px] w-[400px] rounded-full bg-ink-700/20 blur-[100px]" />
-      </div>
-
-      {/* Floating cards */}
-      <div className="pointer-events-none absolute inset-0 hidden items-center justify-center lg:flex">
-        {floatCards.map((card) => {
-          const tx = useTransform(sx, (v) => v * card.x * 0.3);
-          const ty = useTransform(sy, (v) => v * card.y * 0.3);
-          return (
-            <motion.div
-              key={card.label}
-              style={{ x: tx, y: ty }}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: mouseIn ? 0.5 : 0.25, scale: 1 }}
-              transition={{ delay: card.delay, duration: 1 }}
-              className="absolute flex items-center gap-2 rounded-full border border-ink-700/50 bg-ink-900/40 px-4 py-2 backdrop-blur-sm"
-            >
-              <span className="text-accent-400">{card.icon}</span>
-              <span className="text-sm text-ink-300">{card.label}</span>
-            </motion.div>
-          );
-        })}
       </div>
 
       {/* Main content */}
