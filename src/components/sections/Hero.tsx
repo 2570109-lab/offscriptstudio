@@ -70,7 +70,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.8 }}
-          className="mb-6 inline-flex items-center gap-2 rounded-full border border-ink-800 bg-ink-900/50 px-4 py-1.5 text-xs text-ink-300 backdrop-blur-sm"
+          className="mb-6 inline-flex max-w-[90vw] items-center gap-2 rounded-full border border-ink-800 bg-ink-900/50 px-3 py-1.5 text-[10px] text-ink-300 backdrop-blur-sm sm:px-4 sm:text-xs"
         >
           <span className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-400 opacity-75" />
@@ -79,7 +79,7 @@ export default function Hero() {
           Custom scoped. Pay as you go.
         </motion.div>
 
-        <h1 className="font-display text-[2.75rem] font-semibold leading-[0.95] tracking-tight text-ink-50 sm:text-6xl lg:text-7xl xl:text-8xl">
+        <h1 className="font-display text-[2.5rem] font-semibold leading-[0.9] tracking-tight text-ink-50 sm:text-6xl lg:text-7xl xl:text-8xl">
           <span className="block overflow-hidden">
             <motion.span
               initial={{ y: '100%' }}
@@ -126,7 +126,7 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2, duration: 0.8 }}
-          className="mx-auto mt-8 max-w-xl text-balance text-lg text-ink-300 sm:text-xl"
+          className="mx-auto mt-8 max-w-xl text-balance text-base text-ink-300 sm:text-xl"
         >
           Websites, content and growth systems designed around your business, not a template.
         </motion.p>
@@ -135,11 +135,11 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.4, duration: 0.8 }}
-          className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
+          className="mt-10 flex w-full max-w-[320px] flex-col items-center justify-center gap-4 sm:max-w-none sm:flex-row"
         >
           <a
             href="#configurator"
-            className="group relative flex items-center gap-2 overflow-hidden rounded-full bg-accent-400 px-7 py-3.5 font-medium text-ink-950 transition-transform hover:scale-[1.03] active:scale-95"
+            className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-accent-400 px-6 py-3.5 font-medium text-ink-950 transition-transform hover:scale-[1.03] active:scale-95 sm:w-auto"
           >
             <span className="relative z-10">Start a Project</span>
             <ArrowUpRight size={18} className="relative z-10 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -147,7 +147,7 @@ export default function Hero() {
           </a>
           <a
             href="#services"
-            className="rounded-full border border-ink-700 px-7 py-3.5 font-medium text-ink-200 transition-colors hover:border-ink-500 hover:text-ink-50"
+            className="w-full rounded-full border border-ink-700 px-6 py-3.5 text-center font-medium text-ink-200 transition-colors hover:border-ink-500 hover:text-ink-50 sm:w-auto"
           >
             See Our Approach
           </a>

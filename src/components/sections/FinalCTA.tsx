@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowUpRight, Mail } from 'lucide-react';
+import { ArrowUpRight, Phone } from 'lucide-react';
 
 export default function FinalCTA() {
   return (
@@ -47,10 +47,10 @@ export default function FinalCTA() {
             <span className="absolute inset-0 translate-y-full bg-ink-50 transition-transform duration-300 group-hover:translate-y-0" />
           </a>
           <a
-            href="tel:8171924503"
+            href="tel:+918171924503"
             className="flex items-center gap-2 rounded-full border border-ink-700 px-8 py-4 font-medium text-ink-200 transition-colors hover:border-ink-500 hover:text-ink-50"
           >
-            <Mail size={18} />
+            <Phone size={18} />
             Call Us
           </a>
         </motion.div>

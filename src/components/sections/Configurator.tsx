@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { FormEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ArrowLeft, Check, Sparkles } from 'lucide-react';
 import { initialConfig, type ProjectConfig } from './configurator/estimate';
@@ -46,6 +47,8 @@ export default function Configurator() {
   const [step, setStep] = useState(0);
   const [config, setConfig] = useState<ProjectConfig>(initialConfig);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionMessage, setSubmissionMessage] = useState('');
 
   const toggle = (key: keyof ProjectConfig, value: string) => {
     setConfig((prev) => {
@@ -78,6 +81,55 @@ export default function Configurator() {
   };
   const back = () => step > 0 && setStep(step - 1);
 
+  const submitBrief = async () => {
+    setIsSubmitting(true);
+    setSubmissionMessage('');
+
+    try {
+      const projectSummary = [
+        `Project Type: ${config.projectTypes.join(', ') || 'Not specified'}`,
+        `Business: ${config.business.name || 'Not specified'}`,
+        `Industry: ${config.business.industry || 'Not specified'}`,
+        `Website: ${config.business.website || 'Not specified'}`,
+        `Location: ${config.business.location || 'Not specified'}`,
+        `Audience: ${config.business.audience || 'Not specified'}`,
+        `Description: ${config.business.description || 'Not specified'}`,
+        `Primary Goal: ${config.goals.join(', ') || 'Not specified'}`,
+        `Features: ${config.features.join(', ') || 'Not specified'}`,
+        `Growth: ${config.growth.join(', ') || 'Not specified'}`,
+        `Experience: ${config.experience || 'Not specified'}`,
+        `Timeline: ${config.timeline || 'Not specified'}`,
+        `Budget: ${config.budget || 'Not specified'}`,
+      ].join('\n');
+
+      const formData = new FormData();
+      formData.append('access_key', 'eccfceac-875f-4d7a-8d3a-8e995893bc58');
+      formData.append('name', config.contact.name || 'New lead');
+      formData.append('email', config.contact.email || '');
+      formData.append('phone', config.contact.phone || '');
+      formData.append('company', config.contact.company || '');
+      formData.append('subject', 'Offscript Studio Project Brief');
+      formData.append('message', `New project inquiry from Offscript Studio website.\n\n${projectSummary}`);
+
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setSubmissionMessage('Your brief has been submitted successfully. We will contact you shortly.');
+      } else {
+        setSubmissionMessage('There was a problem submitting your brief. Please email hello@offscriptstudio.com directly.');
+      }
+    } catch (error) {
+      setSubmissionMessage('There was a problem submitting your brief. Please email hello@offscriptstudio.com directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section id="configurator" className="relative px-6 py-32 sm:py-40">
       <div className="mx-auto max-w-6xl">
@@ -93,7 +145,13 @@ export default function Configurator() {
 
         <AnimatePresence mode="wait">
           {submitted ? (
-            <FinalSummary config={config} onReset={() => { setSubmitted(false); setStep(0); setConfig(initialConfig); }} />
+            <FinalSummary
+              config={config}
+              isSubmitting={isSubmitting}
+              submissionMessage={submissionMessage}
+              onSubmit={submitBrief}
+              onReset={() => { setSubmitted(false); setStep(0); setConfig(initialConfig); setSubmissionMessage(''); }}
+            />
           ) : (
             <motion.div
               key="configurator"
@@ -265,7 +323,7 @@ function Input({ label, value, onChange, placeholder, required }: { label: strin
   );
 }
 
-function FinalSummary({ config, onReset }: { config: ProjectConfig; onReset: () => void }) {
+function FinalSummary({ config, isSubmitting, submissionMessage, onSubmit, onReset }: { config: ProjectConfig; isSubmitting: boolean; submissionMessage: string; onSubmit: () => Promise<void>; onReset: () => void }) {
   const rows: { label: string; value: string }[] = [
     { label: 'Project Type', value: config.projectTypes.join(', ') || 'Not specified' },
     { label: 'Business', value: config.business.name || 'Not specified' },
@@ -324,13 +382,14 @@ function FinalSummary({ config, onReset }: { config: ProjectConfig; onReset: () 
         </motion.div>
 
         <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-          <a
-            href="mailto:hello@offscriptstudio.com?subject=Project%20Brief"
-            className="group flex items-center gap-2 rounded-full bg-accent-400 px-7 py-3.5 font-medium text-ink-950 transition-transform hover:scale-[1.03] active:scale-95"
+          <button
+            onClick={onSubmit}
+            disabled={isSubmitting}
+            className="group flex items-center gap-2 rounded-full bg-accent-400 px-7 py-3.5 font-medium text-ink-950 transition-transform hover:scale-[1.03] active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
           >
             <Sparkles size={18} />
-            Send My Brief
-          </a>
+            {isSubmitting ? 'Sending...' : 'Send My Brief'}
+          </button>
           <button
             onClick={onReset}
             className="rounded-full border border-ink-700 px-7 py-3.5 text-sm text-ink-300 transition-colors hover:text-ink-50"
@@ -338,6 +397,10 @@ function FinalSummary({ config, onReset }: { config: ProjectConfig; onReset: () 
             Start Over
           </button>
         </div>
+
+        {submissionMessage && (
+          <p className="mt-4 text-sm text-accent-300">{submissionMessage}</p>
+        )}
       </div>
     </motion.div>
   );

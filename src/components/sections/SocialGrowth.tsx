@@ -2,8 +2,41 @@ import { motion } from 'framer-motion';
 import { Heart, MessageCircle, Send, Bookmark, Play } from 'lucide-react';
 
 const services = [
-  'Content strategy', 'Reels', 'Creative direction',
-  'Instagram management', 'Content calendars', 'Campaigns', 'Community growth',
+  {
+    title: 'Content strategy',
+    description: 'Audience, positioning, and a clear reason to care.',
+    deliverables: 'Pillars / messaging / channels',
+  },
+  {
+    title: 'Reels',
+    description: 'Short-form concepts designed to earn the first three seconds.',
+    deliverables: 'Hooks / scripts / edits',
+  },
+  {
+    title: 'Creative direction',
+    description: 'A recognizable visual world across every post and campaign.',
+    deliverables: 'References / art direction',
+  },
+  {
+    title: 'Instagram management',
+    description: 'A thoughtful, consistent presence handled end to end.',
+    deliverables: 'Publishing / community replies',
+  },
+  {
+    title: 'Content calendars',
+    description: 'A practical plan that turns good ideas into a steady rhythm.',
+    deliverables: 'Weekly plan / formats / dates',
+  },
+  {
+    title: 'Campaigns',
+    description: 'One strong idea carried through a focused launch.',
+    deliverables: 'Concept / rollout / assets',
+  },
+  {
+    title: 'Community growth',
+    description: 'Turn passing attention into conversations and regulars.',
+    deliverables: 'Engagement / listening / insights',
+  },
 ];
 
 const marqueeItems = ['STRATEGY', 'CONTENT', 'CREATIVE', 'DISTRIBUTION', 'ANALYTICS', 'OPTIMIZATION'];
@@ -30,18 +63,27 @@ export default function SocialGrowth() {
       </div>
 
       <div className="grid gap-8 px-6 lg:grid-cols-[1fr_400px]">
-        <div className="flex flex-wrap gap-3">
-          {services.map((s, i) => (
-            <motion.span
-              key={s}
+        <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2">
+          {services.map((service, i) => (
+            <motion.article
+              key={service.title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
-              className="rounded-full border border-ink-700 bg-ink-900/40 px-5 py-2.5 text-sm text-ink-200 transition-colors hover:border-accent-400/30 hover:text-accent-400"
+              className="min-w-0 rounded-2xl border border-ink-800 bg-ink-900/40 p-4 transition-colors hover:border-accent-400/40 sm:p-5"
             >
-              {s}
-            </motion.span>
+              <div className="mb-5 flex items-center justify-between gap-3">
+                <span className="font-mono text-[10px] text-accent-400">0{i + 1}</span>
+                <span className="h-px flex-1 bg-ink-800" />
+                <span className="text-[10px] uppercase tracking-wider text-ink-500">Growth</span>
+              </div>
+              <h3 className="font-display text-base font-medium text-ink-100 sm:text-lg">{service.title}</h3>
+              <p className="mt-2 text-xs leading-relaxed text-ink-400 sm:text-sm">{service.description}</p>
+              <p className="mt-4 border-t border-ink-800 pt-3 text-[10px] leading-relaxed text-ink-500 sm:text-xs">
+                {service.deliverables}
+              </p>
+            </motion.article>
           ))}
         </div>
 

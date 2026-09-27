@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu, Phone, X } from 'lucide-react';
 
 const links = [
   { label: 'Work', href: '#work' },
@@ -27,14 +27,14 @@ export default function Nav() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed left-1/2 top-4 z-[100] w-[calc(100%-1rem)] max-w-7xl -translate-x-1/2 sm:w-[calc(100%-2rem)]"
+        className="fixed inset-x-2 top-4 z-[100] mx-auto w-auto max-w-7xl sm:inset-x-4"
       >
         <div
           className={`flex items-center justify-between rounded-full px-3 py-2.5 transition-all duration-500 sm:px-6 ${
             scrolled ? 'glass shadow-2xl shadow-black/40' : 'bg-transparent'
           }`}
         >
-          <a href="#top" className="flex items-center gap-1 font-display text-sm font-semibold tracking-tight sm:text-lg">
+          <a href="#top" onClick={() => setMenuOpen(false)} className="flex min-w-0 items-center gap-1 font-display text-sm font-semibold tracking-tight sm:text-lg">
             <span className="hidden sm:inline">Offscript<span className="text-accent-400"> Studio</span></span>
             <span className="sm:hidden">Offscript</span>
           </a>
@@ -60,12 +60,21 @@ export default function Nav() {
               <span className="relative z-10">Start</span>
               <span className="absolute inset-0 translate-y-full bg-accent-400 transition-transform duration-300 group-hover:translate-y-0" />
             </a>
+            <a
+              href="tel:+918171924503"
+              aria-label="Call Offscript Studio"
+              title="Call Offscript Studio"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-ink-700 text-ink-100 transition-colors hover:border-accent-400 hover:text-accent-400 md:hidden"
+            >
+              <Phone size={16} />
+            </a>
             <button
               type="button"
               aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
               aria-expanded={menuOpen}
+              aria-controls="mobile-navigation"
               onClick={() => setMenuOpen((open) => !open)}
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-ink-700 text-ink-100 transition-colors hover:border-accent-400 hover:text-accent-400 md:hidden"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-ink-700 text-ink-100 transition-colors hover:border-accent-400 hover:text-accent-400 md:hidden"
             >
               {menuOpen ? <X size={17} /> : <Menu size={17} />}
             </button>
@@ -77,6 +86,7 @@ export default function Nav() {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
+            id="mobile-navigation"
             className="glass mt-2 rounded-3xl p-3 md:hidden"
           >
             <div className="flex flex-col">
